@@ -1,0 +1,28 @@
+{
+  "name": "electron-monorepo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "admin": "yarn workspace admin dev",
+    "client": "yarn workspace client dev",
+    "dev:electron": "yarn workspace electron dev",
+    "dev:vite": "concurrently --kill-others-on-fail \"yarn admin\"  \"yarn client\""
+  },
+  "devDependencies": {
+    "concurrently": "^7.4.0",
+    "electron": "^21.0.1",
+    "electron-is-dev": "^2.0.0",
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "packageManager": "yarn@1.22.19"
+}
