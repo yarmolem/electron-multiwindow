@@ -1,10 +1,21 @@
 import { Button } from 'ui'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    // @ts-ignore
+    const remove = window.Main.on('nameReply', () => {
+      console.log('RECIBIDO')
+      setCount(1000)
+    })
+    return () => {
+      remove()
+    }
+  }, [])
 
   return (
     <div className="App">
@@ -21,8 +32,15 @@ function App() {
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
-        <button onClick={() => (window as any).Main.window.client.open()}>Abrir cliente</button>
-        <button onClick={() => (window as any).Main.window.client.close()}>Cerrar cliente</button>
+        <button onClick={() => (window as any).Main.window.client.open()}>
+          Abrir cliente
+        </button>
+        <button onClick={() => (window as any).Main.window.client.close()}>
+          Cerrar cliente
+        </button>
+        <button onClick={() => (window as any).Main.window.admin.message()}>
+          Enviar
+        </button>
         <Button />
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR

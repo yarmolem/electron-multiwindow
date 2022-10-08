@@ -17,39 +17,41 @@ function createWindow(url: string, isAdmin?: boolean) {
         preload: join(__dirname, 'preload.js')
       }
     })
-  
+
     if (isDev) {
       window?.loadURL(url)
     } else {
       window?.loadFile(url)
     }
-  
-    globalShortcut.register('CmdOrCtrl+F12', () => {
-      window.isFocused() && window.webContents.toggleDevTools()
-    })
-  
+
     const onCloseWindow = () => window.close()
-  
+
     const onMinimizeWindow = () => {
       window.isMinimized() ? window.restore() : window.minimize()
     }
-  
+
     const onMaximizeWindow = () => {
       window.isMaximized() ? window.restore() : window.maximize()
     }
-  
+
     if (isAdmin) {
       ipcMain.on('close-admin', onCloseWindow)
       ipcMain.on('minimize-admin', onMinimizeWindow)
       ipcMain.on('maximize-admin', onMaximizeWindow)
+      globalShortcut.register('CmdOrCtrl+F12', () => {
+        window.isFocused() && window.webContents.toggleDevTools()
+      })
     } else {
       ipcMain.on('close-client', onCloseWindow)
       ipcMain.on('minimize-client', onMinimizeWindow)
       ipcMain.on('maximize-client', onMaximizeWindow)
+      globalShortcut.register('CmdOrCtrl+F11', () => {
+        window.isFocused() && window.webContents.toggleDevTools()
+      })
     }
 
-  
     return {
+      window,
       clean: () => {
         if (isAdmin) {
           ipcMain.off('close-admin', onCloseWindow)
@@ -60,8 +62,8 @@ function createWindow(url: string, isAdmin?: boolean) {
           ipcMain.off('close-client', onCloseWindow)
           ipcMain.off('minimize-client', onMinimizeWindow)
           ipcMain.off('maximize-client', onMaximizeWindow)
+          globalShortcut.unregister('CmdOrCtrl+F11')
         }
-  
       }
     }
   }
@@ -71,15 +73,20 @@ const createAdminWindow = createWindow(adminUrl, true)
 const createClientWindow = createWindow(clientUrl)
 
 app.whenReady().then(() => {
-  let clientWindow: ReturnType<typeof createClientWindow> | null = null
+  let client: ReturnType<typeof createClientWindow> | null = null
   createAdminWindow()
 
   ipcMain.on('open-client', () => {
-    clientWindow = createClientWindow()
+    client = createClientWindow()
   })
-  
+
   ipcMain.on('close-client', () => {
-    clientWindow?.clean()
+    client?.clean()
+  })
+
+  ipcMain.on('mensaje', (event, data) => {
+    event.sender.send('nameReply', { not_right: false })
+    client?.window.webContents.send('forWin2', data)
   })
 })
 

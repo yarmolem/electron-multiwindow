@@ -1,9 +1,23 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+
+  // @ts-ignore
+  console.log(window.Main)
+
+  useEffect(() => {
+    // @ts-ignore
+    const remove = window.Main.on('forWin2', () => {
+      console.log('RECIBIDO')
+      setCount(1000)
+    })
+    return () => {
+      remove()
+    }
+  }, [])
 
   return (
     <div className="App">

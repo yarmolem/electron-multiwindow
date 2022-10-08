@@ -18,6 +18,10 @@ const api = {
       close: () => {
         ipcRenderer.send('close-admin')
       },
+      message: () => {
+        console.log('ENVIADO')
+        ipcRenderer.send('mensaje', { isWorking: true })
+      }
     },
     client: {
       open: () => {
@@ -31,7 +35,7 @@ const api = {
       },
       close: () => {
         ipcRenderer.send('close-client')
-      },
+      }
     }
   },
   on: (channel: string, callback: (data: any) => void) => {
