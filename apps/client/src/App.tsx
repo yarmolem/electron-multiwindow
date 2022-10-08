@@ -10,7 +10,7 @@ function App() {
 
   useEffect(() => {
     // @ts-ignore
-    const remove = window.Main.on('forWin2', () => {
+    const remove = window.Main.on('forWin2', ({ command, data }) => {
       console.log('RECIBIDO')
       setCount(1000)
     })

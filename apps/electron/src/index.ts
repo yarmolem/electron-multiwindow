@@ -85,7 +85,6 @@ app.whenReady().then(() => {
   })
 
   ipcMain.on('mensaje', (event, data) => {
-    event.sender.send('nameReply', { not_right: false })
     client?.window.webContents.send('forWin2', data)
   })
 })

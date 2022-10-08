@@ -18,9 +18,9 @@ const api = {
       close: () => {
         ipcRenderer.send('close-admin')
       },
-      message: () => {
+      message: (data: any) => {
         console.log('ENVIADO')
-        ipcRenderer.send('mensaje', { isWorking: true })
+        ipcRenderer.send('mensaje', data)
       }
     },
     client: {

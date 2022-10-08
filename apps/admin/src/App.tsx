@@ -38,7 +38,14 @@ function App() {
         <button onClick={() => (window as any).Main.window.client.close()}>
           Cerrar cliente
         </button>
-        <button onClick={() => (window as any).Main.window.admin.message()}>
+        <button
+          onClick={() =>
+            (window as any).Main.window.admin.message({
+              command: 'DELETE',
+              data: []
+            })
+          }
+        >
           Enviar
         </button>
         <Button />
